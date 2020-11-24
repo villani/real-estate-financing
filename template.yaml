@@ -1,0 +1,87 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    real-estate-financing -> 
+
+    Rest API to manage a real estate financing.
+
+Globals:
+    Function:
+        Timeout: 20
+        MemorySize: 512
+        Environment:
+          Variables:
+            TABLE_NAME: !Ref FinancingTable
+            ENDPOINT_OVERRIDE: ""
+
+Resources:
+
+  CreateFinancingRecordFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/real-estate-financing-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.leonardovillani.handler.CreateFinancingRecord::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref FinancingTable     
+     Events:
+       CreateFinancingRecord:
+         Type: Api
+         Properties:
+           Path: /financing
+           Method: post
+
+  GetFinancingRecordsByClientFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/real-estate-financing-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.leonardovillani.handler.GetFinancingRecordsByClient::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref FinancingTable     
+     Events:
+       CreateFinancingRecord:
+         Type: Api
+         Properties:
+           Path: /financing/{client}
+           Method: get
+              
+  FinancingTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: financing
+      AttributeDefinitions:
+        - AttributeName: client
+          AttributeType: S     
+        - AttributeName: dateTimeStart
+          AttributeType: S            
+        - AttributeName: term
+          AttributeType: N                              
+      KeySchema:
+        - AttributeName: client
+          KeyType: HASH
+        - AttributeName: dateTimeStart
+          KeyType: RANGE
+      LocalSecondaryIndexes: 
+        - IndexName: termIndex
+          KeySchema: 
+            - AttributeName: client
+              KeyType: HASH
+            - AttributeName: term
+              KeyType: RANGE
+          Projection:
+             ProjectionType: ALL 
+      BillingMode: PAY_PER_REQUEST              
+
+Outputs:
+
+    CreateFinancingRecordFunction:
+      Description: "CreateFinancingRecord Lambda Function ARN"
+      Value: !GetAtt CreateFinancingRecordFunction.Arn
+
+    GetFinancingRecordsByClientFunction: 
+      Description: "GetFinancingRecordsByClient Lambda Function ARN"
+      Value: !GetAtt GetFinancingRecordsByClientFunction.Arn

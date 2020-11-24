@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "ef9ef35f-a302-4fa0-b0f0-b15a387362ba",
+		"name": "Real State Financing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createFinancingRecord",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"client\": null,\n    \"entry\": null,\n    \"dateTimeStart\": null,\n    \"term\": null,\n    \"installment\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/financing",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"financing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllFinancingRecord",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/financing",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"financing"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
