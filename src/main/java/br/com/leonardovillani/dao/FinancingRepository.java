@@ -28,9 +28,9 @@ public class FinancingRepository {
 		final DynamoDBQueryExpression<Financing> queryExpression = new DynamoDBQueryExpression<Financing>()
 				.withKeyConditionExpression("client = :val1").withExpressionAttributeValues(eav);
 
-		final List<Financing> studies = mapper.query(Financing.class, queryExpression);
+		final List<Financing> financing = mapper.query(Financing.class, queryExpression);
 
-		return studies;
+		return financing;
 	}
 
 	
